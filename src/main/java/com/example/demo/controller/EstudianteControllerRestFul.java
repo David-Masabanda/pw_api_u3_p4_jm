@@ -31,6 +31,8 @@ public class EstudianteControllerRestFul {
 	public void ingresarEstudiante(@RequestBody Estudiante estudiante) {
 		this.estudianteService.guardarEstudiante(estudiante);
 	}
+	
+	
 	@PutMapping(path="/actualizar")
 	public void actualizarEstudiante(Estudiante e) {
 		
