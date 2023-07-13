@@ -19,7 +19,7 @@ public class PwApiU3P4JmApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(this.estudianteControllerRestFul.consultarPorCedula());		
+		//System.out.println(this.estudianteControllerRestFul.consultarPorCedula());		
 	}
 
 }

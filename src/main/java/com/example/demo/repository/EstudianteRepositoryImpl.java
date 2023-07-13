@@ -23,4 +23,11 @@ public class EstudianteRepositoryImpl  implements IEstudianteRepository{
 		return myQuery.getSingleResult();
 	}
 
+	@Override
+	public void insertarEstudiante(Estudiante estudiante) {
+		this.entityManager.persist(estudiante);
+	}
+
+
+
 }
