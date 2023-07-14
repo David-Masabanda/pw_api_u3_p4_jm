@@ -31,6 +31,9 @@ public class Estudiante {
 	
 	@Column(name="estu_fechaNacimiento")
 	private LocalDateTime fechaNacimiento;
+	
+	@Column(name="estu_provincia")
+	private String provincia;
 
 	
 	//Get y Set
@@ -78,5 +81,13 @@ public class Estudiante {
 	public String toString() {
 		return "Estudiante [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", cedula=" + cedula
 				+ ", fechaNacimiento=" + fechaNacimiento + "]";
+	}
+
+	public String getProvincia() {
+		return provincia;
+	}
+
+	public void setProvincia(String provincia) {
+		this.provincia = provincia;
 	}
 }
