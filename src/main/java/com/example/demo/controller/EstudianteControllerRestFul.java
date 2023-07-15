@@ -25,44 +25,53 @@ public class EstudianteControllerRestFul {
 	private IEstudianteService estudianteService;
 	
 	
-	@GetMapping(path="/buscar/{cedula}")
+	@GetMapping(path="/{cedula}")
 	public Estudiante consultarPorCedula(@PathVariable String cedula) {
 		return this.estudianteService.consultarPorCedula(cedula);
 	}
 	
-	@PostMapping(path="/guardar")
+	//Para el post existe una excepcion, no haria falta un path 
+	@PostMapping()
 	public void ingresarEstudiante(@RequestBody Estudiante estudiante) {
 		this.estudianteService.guardarEstudiante(estudiante);
 	}
 	
 	
-	@PutMapping(path="/actualizar/{identificador}")
+	@PutMapping(path="/{identificador}")
 	public void actualizarEstudiante(@RequestBody Estudiante estudiante, @PathVariable Integer identificador) {
 		estudiante.setId(identificador); 
 		this.estudianteService.actualizarEstudiante(estudiante);
 	}
 	
-	@PatchMapping(path="/actualizarParcial/{identificador}")
+	@PatchMapping(path="/{identificador}")
 	public void actualizarParcial(@RequestBody Estudiante estudiante, @PathVariable Integer identificador) {
-		estudiante.setId(identificador); 
-		String cedula="1234";
-		Estudiante estu1=this.estudianteService.consultarPorCedula(cedula);
+		Estudiante estu1=this.estudianteService.buscarPorId(identificador);
 		estu1.setCedula(estudiante.getCedula());
 		this.estudianteService.actualizarEstudiante(estu1);
 	}
 	
 	
-	@DeleteMapping(path="/borrar/{id}")
+	@DeleteMapping(path="/{id}")
 	public void borrarEstudiante(@PathVariable Integer id) {
 		this.estudianteService.borrar(id);
 		
 	}
 	
-	@GetMapping(path="/buscarTodos")
+	@GetMapping()
 	public List<Estudiante> consultarEstudiantes(@RequestParam String provincia) {
 		//buscarTodos?provincia=pichincha
+		System.out.println(this.estudianteService.buscarTodos(provincia));
 		return this.estudianteService.buscarTodos(provincia);
 	}
+	
+	
+	//Puede quedar sin path porque ya es descriptiva, va a traer todos
+//	@GetMapping()
+//	public List<Estudiante> consultarEstudiantes(@RequestParam String provincia) {
+//		//buscarTodos?provincia=pichincha
+//		System.out.println(this.estudianteService.buscarTodos(provincia));
+//		return this.estudianteService.buscarTodos(provincia);
+//	}
 	
 	
 	
