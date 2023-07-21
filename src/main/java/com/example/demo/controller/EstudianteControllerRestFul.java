@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,9 +28,10 @@ public class EstudianteControllerRestFul {
 	
 	
 	@GetMapping(path="/{cedula}")
-	public Estudiante consultarPorCedula(@PathVariable String cedula) {
-		return this.estudianteService.consultarPorCedula(cedula);
+	public ResponseEntity<Estudiante> consultarPorCedula(@PathVariable String cedula) {
+		return ResponseEntity.status(230).body(this.estudianteService.consultarPorCedula(cedula));
 	}
+	
 	
 	//Para el post existe una excepcion, no haria falta un path 
 	@PostMapping()
@@ -58,10 +61,15 @@ public class EstudianteControllerRestFul {
 	}
 	
 	@GetMapping()
-	public List<Estudiante> consultarEstudiantes(@RequestParam String provincia) {
+	public ResponseEntity<List<Estudiante>> consultarEstudiantes() {
 		//buscarTodos?provincia=pichincha
-		System.out.println(this.estudianteService.buscarTodos(provincia));
-		return this.estudianteService.buscarTodos(provincia);
+		
+		List<Estudiante> lista=null;
+		HttpHeaders cabeceras=new HttpHeaders();
+		cabeceras.add("detalleMensaje", "Ciudadanos consultados exitosamente");
+		cabeceras.add("valorAPI", "Incalculable");
+//		System.out.println(this.estudianteService.buscarTodos(provincia));
+		return new ResponseEntity<>(lista,cabeceras,228);
 	}
 	
 }
