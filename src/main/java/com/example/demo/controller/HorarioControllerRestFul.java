@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +29,12 @@ public class HorarioControllerRestFul {
 	@Autowired
 	private IHorarioService horarioService;
 	
-	@GetMapping(path="/{paralelo}")
-	
+	@GetMapping(path="/{paralelo}")	
 	public ResponseEntity<Horario> consultarPorCedula(@PathVariable String paralelo) {
 		return ResponseEntity.status(HttpStatus.OK).body(this.horarioService.consultarPorParalelo(paralelo));
 	}
+	
+	
 	
 	//Para el post existe una excepcion, no haria falta un path 
 	@PostMapping()
@@ -66,5 +68,13 @@ public class HorarioControllerRestFul {
 		//buscarTodos?provincia=pichincha
 		//System.out.println(this.estudianteService.buscarTodos(provincia));
 		return this.horarioService.buscarTodos(materia);
+	}
+	
+	
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Horario guardarRevisar (@RequestBody Horario horario) {
+		this.horarioService.guardarHorario(horario);
+		Horario h1=this.horarioService.buscarPorId(horario.getId());
+		return h1;
 	}
 }

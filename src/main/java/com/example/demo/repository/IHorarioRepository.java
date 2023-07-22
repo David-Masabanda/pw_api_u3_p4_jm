@@ -19,4 +19,6 @@ public interface IHorarioRepository {
 	public Horario buscarPorId(Integer id);
 	
 	public List<Horario> buscarTodos(String materia);
+	
+	
 }

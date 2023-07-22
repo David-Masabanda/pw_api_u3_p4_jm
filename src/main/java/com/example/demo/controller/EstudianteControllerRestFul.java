@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.repository.modelo.Estudiante;
+import com.example.demo.repository.modelo.Horario;
 import com.example.demo.service.IEstudianteService;
 
 @RestController
@@ -27,17 +29,26 @@ public class EstudianteControllerRestFul {
 	private IEstudianteService estudianteService;
 	
 	
-	@GetMapping(path="/{cedula}")
-	public ResponseEntity<Estudiante> consultarPorCedula(@PathVariable String cedula) {
-		return ResponseEntity.status(230).body(this.estudianteService.consultarPorCedula(cedula));
+	@GetMapping(path="/{cedula}",produces = MediaType.APPLICATION_JSON_VALUE)
+	public Estudiante consultarPorCedula(@PathVariable String cedula) {
+		return this.estudianteService.consultarPorCedula(cedula);
+	}
+	
+	
+	@GetMapping(path="/status/{cedula}")
+	public ResponseEntity<Estudiante> consultarPorCedulaStatus(@PathVariable String cedula) {
+		return ResponseEntity.status(HttpStatus.OK).body(this.estudianteService.consultarPorCedula(cedula));
 	}
 	
 	
 	//Para el post existe una excepcion, no haria falta un path 
-	@PostMapping()
-	public void ingresarEstudiante(@RequestBody Estudiante estudiante) {
-		this.estudianteService.guardarEstudiante(estudiante);
-	}
+//	@PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
+//	public void ingresarEstudiante(@RequestBody Estudiante estudiante) {
+//		this.estudianteService.guardarEstudiante(estudiante);
+//	}
+	
+	
+	
 	
 	
 	@PutMapping(path="/{identificador}")
@@ -71,5 +82,17 @@ public class EstudianteControllerRestFul {
 //		System.out.println(this.estudianteService.buscarTodos(provincia));
 		return new ResponseEntity<>(lista,cabeceras,228);
 	}
+	
+	
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Estudiante guardarRevisar (@RequestBody Estudiante estudiante) {
+		this.estudianteService.guardarEstudiante(estudiante);
+		Estudiante e1=this.estudianteService.buscarPorId(estudiante.getId());
+		return e1;
+	}
+	
+	
+	
+	
 	
 }
