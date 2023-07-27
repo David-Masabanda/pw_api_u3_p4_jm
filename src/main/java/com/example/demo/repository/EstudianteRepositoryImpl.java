@@ -63,6 +63,16 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository{
 		myQuery.setParameter("datoProvincia", provincia);
 		return myQuery.getResultList();
 	}
+
+	@Override
+	public List<Estudiante> buscarAll() {
+
+		TypedQuery<Estudiante> myQuery = this.entityManager.createQuery(
+				"SELECT e FROM Estudiante e ORDER BY e.id ASC ", Estudiante.class);
+		return myQuery.getResultList();
+	}
+	
+
 	
 	
 //	@Override

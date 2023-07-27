@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.repository.modelo.Estudiante;
-import com.example.demo.repository.modelo.Horario;
 import com.example.demo.service.IEstudianteService;
+import com.example.demo.service.to.EstudianteTO;
+import com.example.demo.service.to.MateriaTO;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/estudiantes")
@@ -71,17 +75,17 @@ public class EstudianteControllerRestFul {
 		
 	}
 	
-	@GetMapping()
-	public ResponseEntity<List<Estudiante>> consultarEstudiantes() {
-		//buscarTodos?provincia=pichincha
-		
-		List<Estudiante> lista=null;
-		HttpHeaders cabeceras=new HttpHeaders();
-		cabeceras.add("detalleMensaje", "Ciudadanos consultados exitosamente");
-		cabeceras.add("valorAPI", "Incalculable");
-//		System.out.println(this.estudianteService.buscarTodos(provincia));
-		return new ResponseEntity<>(lista,cabeceras,228);
-	}
+//	@GetMapping()
+//	public ResponseEntity<List<Estudiante>> consultarEstudiantes() {
+//		//buscarTodos?provincia=pichincha
+//		
+//		List<Estudiante> lista=null;
+//		HttpHeaders cabeceras=new HttpHeaders();
+//		cabeceras.add("detalleMensaje", "Ciudadanos consultados exitosamente");
+//		cabeceras.add("valorAPI", "Incalculable");
+////		System.out.println(this.estudianteService.buscarTodos(provincia));
+//		return new ResponseEntity<>(lista,cabeceras,228);
+//	}
 	
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -92,6 +96,21 @@ public class EstudianteControllerRestFul {
 	}
 	
 	
+	@GetMapping(path = "/hateoas")
+	public ResponseEntity<List<EstudianteTO>> consultarTodosHATEOAS() {
+		List<EstudianteTO> lista=this.estudianteService.buscarTodos();
+		
+		for(EstudianteTO e : lista) {
+			Link myLink = linkTo(methodOn(EstudianteControllerRestFul.class).buscarPorEstudiante(e.getCedula())).withRel("materias");
+			e.add(myLink);
+		}
+		return new ResponseEntity<>(lista,null,300);
+	}
+	
+	@GetMapping(path = "/{cedula}/materias")
+	public ResponseEntity<List<MateriaTO>> buscarPorEstudiante (@PathVariable String cedula){
+		return null;
+	}
 	
 	
 	
