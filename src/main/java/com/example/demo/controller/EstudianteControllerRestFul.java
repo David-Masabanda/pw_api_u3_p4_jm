@@ -7,6 +7,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +29,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/estudiantes")
+@CrossOrigin
 public class EstudianteControllerRestFul {
 
 	@Autowired
@@ -112,8 +114,17 @@ public class EstudianteControllerRestFul {
 	
 	@GetMapping(path = "/{cedula}/materias" , produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MateriaTO>> buscarPorEstudiante (@PathVariable String cedula){
-		return new ResponseEntity<>(this.materiaService.buscarPorCedulaEstudiante(cedula),null,302);
+		List<MateriaTO> mat = this.materiaService.buscarPorCedulaEstudiante(cedula);
+		
+		for(MateriaTO m : mat) {
+			Link myLink = linkTo(methodOn(MateriaControllerRestFul.class).buscarPorId(m.getId())).withSelfRel();
+			m.add(myLink);
+		}
+		
+		return new ResponseEntity<>(mat,null,302);
 	}
+	
+	
 	
 	
 	
