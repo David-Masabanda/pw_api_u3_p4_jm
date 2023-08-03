@@ -51,20 +51,21 @@ public class EstudianteControllerRestFul {
 	
 	
 	//Para el post existe una excepcion, no haria falta un path 
-//	@PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
-//	public void ingresarEstudiante(@RequestBody Estudiante estudiante) {
-//		this.estudianteService.guardarEstudiante(estudiante);
-//	}
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void ingresarEstudiante(@RequestBody Estudiante estudiante) {
+		this.estudianteService.guardarEstudiante(estudiante);
+	}
 	
 	
-	
-	
-	
-	@PutMapping(path="/{identificador}")
+	@PutMapping(path="/{identificador}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void actualizarEstudiante(@RequestBody Estudiante estudiante, @PathVariable Integer identificador) {
 		estudiante.setId(identificador); 
 		this.estudianteService.actualizarEstudiante(estudiante);
 	}
+	
+	
+	
+	
 	
 	@PatchMapping(path="/{identificador}")
 	public void actualizarParcial(@RequestBody Estudiante estudiante, @PathVariable Integer identificador) {
@@ -93,12 +94,12 @@ public class EstudianteControllerRestFul {
 //	}
 	
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Estudiante guardarRevisar (@RequestBody Estudiante estudiante) {
-		this.estudianteService.guardarEstudiante(estudiante);
-		Estudiante e1=this.estudianteService.buscarPorId(estudiante.getId());
-		return e1;
-	}
+//	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+//	public Estudiante guardarRevisar (@RequestBody Estudiante estudiante) {
+//		this.estudianteService.guardarEstudiante(estudiante);
+//		Estudiante e1=this.estudianteService.buscarPorId(estudiante.getId());
+//		return e1;
+//	}
 	
 	
 	@GetMapping(path = "/hateoas", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -124,6 +125,13 @@ public class EstudianteControllerRestFul {
 		return new ResponseEntity<>(mat,null,302);
 	}
 	
+	@DeleteMapping(path="/eliminar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Estudiante borrarEstudiantePresentar(@PathVariable Integer id) {
+		Estudiante e=this.estudianteService.buscarPorId(id);
+		this.estudianteService.borrar(id);
+		return e;
+		
+	}
 	
 	
 	
